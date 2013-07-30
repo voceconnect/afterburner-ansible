@@ -1,0 +1,16 @@
+---
+- name: common tasks...
+  hosts: all
+  user: root
+
+- name: configure and deploy mysql servers...
+  hosts: mysql-servers
+  user: root
+
+- name: configure and deploy memcached servers...
+  hosts: memcached-servers
+  user: root
+
+- name: configure and deploy web servers...
+  hosts: web-servers
+  user: root

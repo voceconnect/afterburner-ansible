@@ -1,0 +1,10 @@
+.DS_Store
+
+## ansible
+ansible.cfg
+hosts
+host_vars/
+
+## vagrant
+.vagrant/
+Vagrantfile
