@@ -1,0 +1,125 @@
+---
+- name: add percona mysql apt key
+  apt_key: >
+    url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1C4CBDCDCD2EFD2A
+    state=present
+  tags:
+    - mysql:setup
+
+- name: add percona mysql package sources
+  apt_repository: >
+    repo='deb http://repo.percona.com/apt {{ ansible_distribution_release }} main'
+    state=present
+  tags:
+    - mysql:setup
+
+- name: install mysql packages
+  apt: >
+    pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - libmysqlclient-dev
+    - percona-server-client-5.5
+    - percona-server-common-5.5
+    - percona-server-server-5.5
+    - percona-toolkit
+    - percona-xtrabackup
+    - python-mysqldb
+  notify: mysql update-rc.d
+  tags:
+    - mysql:setup
+
+- name: install support packages
+  apt: >
+    pkg={{ item }} state=installed
+  with_items:
+    - mytop
+    - mysqltuner
+  tags:
+    - mysql:setup
+
+- name: add /etc/mysql/my.cnf
+  template: >
+    src=etc-mysql-my.cnf.j2
+    dest=/etc/mysql/my.cnf
+    owner=root group=root mode=0644
+  tags:
+    - mysql:setup
+  notify:
+    - mysql restart
+
+- name: add /etc/mysql/conf.d/mysqld.cnf
+  template: >
+    src=etc-mysql-conf.d-mysqld.cnf.j2
+    dest=/etc/mysql/conf.d/mysqld.cnf
+    owner=root group=root mode=0644
+  tags:
+    - mysql:setup
+  notify:
+    - mysql restart
+
+- name: add /var/lib/mysql/data directory
+  file: >
+    path=/var/lib/mysql/data state=directory
+    owner=mysql group=mysql mode=0700
+  tags:
+    - mysql:setup
+
+- name: add mysql root user
+  mysql_user: >
+    user={{ mysqlRootUsername }}
+    password={{ mysqlRootPassword }}
+    host="%"
+    priv=*.*:ALL,GRANT
+  tags:
+    - mysql:setup
+
+- name: add username to /root/.my.cnf
+  ini_file: >
+    dest=/root/.my.cnf section=client
+    option=user value={{ mysqlRootUsername }}
+  tags:
+    - mysql:setup
+
+- name: add password to /root/.my.cnf
+  ini_file: >
+    dest=/root/.my.cnf section=client
+    option=pass value={{ mysqlRootPassword }}
+  tags:
+    - mysql:setup
+
+- name: delete the mysql root user for ipv6 localhost (::1)
+  mysql_user: user="root" host="::1" state="absent"
+  tags:
+    - mysql:setup
+
+- name: delete the mysql root user for IPV4 localhost (127.0.0.1)
+  mysql_user: user="root" host="127.0.0.1" state="absent"
+  tags:
+    - mysql:setup
+
+- name: delete the mysql root user for fqdn
+  mysql_user: >
+    user="root" host="{{ ansible_fqdn }}" state="absent"
+  tags:
+    - mysql:setup
+
+- name: delete the mysql root user for hostname
+  mysql_user: >
+    user="root" host="{{ ansible_hostname }}" state="absent"
+  tags:
+    - mysql:setup
+
+- name: delete the mysql root user localhost
+  mysql_user: user="root" host="localhost" state="absent"
+  tags:
+    - mysql:setup
+
+- name: delete the mysql test database
+  mysql_db: db=test state=absent
+  tags:
+    - mysql:setup
+
+- name: ensure mysql started
+  service: name=mysql state=started enabled=yes
+  tags:
+    - mysql:setup

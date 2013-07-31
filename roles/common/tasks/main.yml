@@ -67,6 +67,8 @@
     - perl
     - perl-modules
     - psmisc
+    - python-dev
+    - python-pip
     - python-software-properties
     - python-setuptools
     - rdate
@@ -88,6 +90,10 @@
     - zip
     - zlib1g
     - zlib1g-dev
+
+- name: install additional common packages
+  apt: pkg={{ item }} state=installed
+  with_items: $additionalPackages
 
 - name: add /etc/timezone
   lineinfile: >

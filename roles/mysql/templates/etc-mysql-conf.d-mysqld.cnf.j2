@@ -1,0 +1,14 @@
+[mysqld]
+character-set-server = utf8
+collation-server = utf8_unicode_ci
+
+{% if mysqlConfiguration is defined %}
+{% for key, value in mysqlConfiguration.iteritems() %}
+{% if value is defined %}
+{{ key }}={{ value }}
+{% else %}
+{{ key }}
+{% endif %}
+
+{% endfor %}
+{% endif %}

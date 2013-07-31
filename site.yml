@@ -8,8 +8,8 @@
 - name: configure and deploy mysql servers...
   hosts: mysql-servers
   user: root
-  #roles:
-  #  - { role: 'mysql', tags: [ 'mysql' ] }
+  roles:
+    - { role: 'mysql', tags: [ 'mysql' ] }
 
 - name: configure and deploy memcached servers...
   hosts: memcached-servers

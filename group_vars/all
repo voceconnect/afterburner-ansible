@@ -1,4 +1,5 @@
 ---
+additionalPackages: []
 heldPackages:
   - libmysqlclient-dev
   - linux-*
@@ -6,4 +7,5 @@ heldPackages:
   - nginx*
   - percona-*
   - php5-*
+sshListenPort: 22
 timezone: Etc/UTC
