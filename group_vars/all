@@ -1,0 +1,9 @@
+---
+heldPackages:
+  - libmysqlclient-dev
+  - linux-*
+  - memcached
+  - nginx*
+  - percona-*
+  - php5-*
+timezone: Etc/UTC

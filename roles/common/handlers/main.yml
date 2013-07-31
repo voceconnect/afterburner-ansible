@@ -1,1 +1,9 @@
 ---
+- name: timezone apply
+  shell: dpkg-reconfigure --frontend noninteractive tzdata
+
+- name: start procps
+  shell: start procps
+
+- name: ssh restart
+  service: name=ssh state=restarted

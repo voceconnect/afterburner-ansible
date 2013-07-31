@@ -1,1 +1,159 @@
 ---
+- name: reconfigure locales
+  shell: dpkg-reconfigure locales
+
+- name: update-locale utf8
+  shell: update-locale LANG=en_US.UTF-8
+
+- name: install packages
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - ack-grep
+    - apparmor
+    - auditd
+    - autoconf
+    - automake
+    - autotools-dev
+    - bc
+    - binutils
+    - bison
+    - build-essential
+    - checkinstall
+    - cpp
+    - curl
+    - flex
+    - g++
+    - gcc
+    - git-core
+    - git-doc
+    - gnu-standards
+    - htop
+    - iftop
+    - libarchive-zip-perl
+    - libc6-dev
+    - libcrypt-ssleay-perl
+    - libcurl4-openssl-dev
+    - libffi-dev
+    - libgdbm-dev
+    - libicu-dev
+    - libncurses5-dev
+    - libpcre3
+    - libpcre3-dev
+    - libpopt-dev
+    - libreadline-dev
+    - libreadline6
+    - libreadline6-dev
+    - libsasl2-modules
+    - libssh2-1
+    - libssl-dev
+    - libtool
+    - libwww-perl
+    - libxml2-dev
+    - libyaml-dev
+    - locate
+    - logrotate
+    - logwatch
+    - lsof
+    - lynx
+    - m4
+    - mailutils
+    - make
+    - mutt
+    - nload
+    - ntpdate
+    - openssh-client
+    - openssh-server
+    - openssl
+    - perl
+    - perl-modules
+    - psmisc
+    - python-software-properties
+    - python-setuptools
+    - rdate
+    - rsync
+    - rsyslog
+    - rsyslog-gnutls
+    - rsyslog-relp
+    - screen
+    - ssed
+    - strace
+    - subversion
+    - supervisor
+    - sysstat
+    - unattended-upgrades
+    - unzip
+    - vim-nox
+    - vnstat
+    - wget
+    - zip
+    - zlib1g
+    - zlib1g-dev
+
+- name: add /etc/timezone
+  lineinfile: >
+    dest=/etc/timezone
+    regexp="^"
+    line='{{ timezone }}'
+    state=present
+  notify: timezone apply
+
+- name: add cron job to update time with ntpdate
+  cron: >
+    name="ntpdate sync" job="/usr/sbin/ntpdate ntp.ubuntu.com"
+    user=root state=present
+    minute="30" hour="6"
+
+- name: add /etc/hosts
+  template: >
+    src=etc-hosts.j2
+    dest=/etc/hosts
+    owner=root group=root mode=0644
+
+- name: add /etc/security/limits.conf
+  copy: >
+    src=etc-security-limits.conf
+    dest=/etc/security/limits.conf
+    owner=root group=root mode=0644
+
+- name: add /etc/sysctl.d/99-tuning.conf
+  copy: >
+    src=etc-sysctl.d-99-tuning.conf
+    dest=/etc/sysctl.d/99-tuning.conf
+    owner=root group=root mode=0644
+  notify: start procps
+
+- name: add /etc/apt/apt.conf.d/10periodic
+  copy: >
+    src=etc-apt-apt.conf.d-10periodic
+    dest=/etc/apt/apt.conf.d/10periodic
+    owner=root group=root mode=0644
+
+- name: add /etc/apt/apt.conf.d/50unattended-upgrades
+  template: >
+    src=etc-apt-apt.conf.d-50unattended-upgrades
+    dest=/etc/apt/apt.conf.d/50unattended-upgrades
+    owner=root group=root mode=0644
+
+- name: add /etc/ssh/sshd_config
+  template: >
+    src=etc-ssh-sshd_config.j2
+    dest=/etc/ssh/sshd_config
+    owner=root group=root mode=0644
+  notify:
+    - ssh restart
+
+- name: add /etc/ssh/ssh_config
+  copy: >
+    src=etc-ssh-ssh_config
+    dest=/etc/ssh/ssh_config
+    owner=root group=root mode=0644
+
+- name: update /etc/pam.d/common-session
+  lineinfile: >
+    state=present
+    regexp=^
+    line='session required        pam_limits.so'
+    dest=/etc/pam.d/common-session
+
+- name: ensure ssh is started
+  service: name=ssh state=started enabled=yes
