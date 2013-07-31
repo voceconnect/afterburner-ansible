@@ -7,9 +7,13 @@ worker_processes      {{ nginxWorkerProcesses }};
 error_log             /var/log/nginx/nginx.log;
 pid                   /var/run/nginx.pid;
 
-worker_rlimit_nofile  10240;
+# per worker # of file descriptors allowed,
+# each connection may need one or more file descriptors
+worker_rlimit_nofile  38912;
+
 events {
-  worker_connections  8192;
+  # allow a high number of connections
+  worker_connections  19456;
   use                 epoll;
   multi_accept        on;
 }
