@@ -2,5 +2,8 @@
 - name: mysql update-rc.d
   shell: update-rc.d mysql defaults
 
+- name: mysql clear iblogfiles
+  shell: rm -rf /var/lib/mysql/ib_logfile*
+
 - name: mysql restart
   service: name=mysql state=restarted
