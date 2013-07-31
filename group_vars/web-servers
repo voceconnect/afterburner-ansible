@@ -1,0 +1,5 @@
+---
+nginxAllowedDuringMaintenance:
+  - 192.168.0.0/16
+nginxCachePath: /var/cache/nginx
+nginxWorkerProcesses: 4

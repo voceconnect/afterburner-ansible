@@ -1,0 +1,124 @@
+
+user                  www-data;
+
+# max clients = worker_processes * worker_connections
+worker_processes      {{ nginxWorkerProcesses }};
+
+error_log             /var/log/nginx/nginx.log;
+pid                   /var/run/nginx.pid;
+
+worker_rlimit_nofile  10240;
+events {
+  worker_connections  8192;
+  use                 epoll;
+  multi_accept        on;
+}
+
+http {
+  ## MIME types
+  include           /etc/nginx/mime.types;
+  default_type      application/octet-stream;
+
+  access_log off;
+
+  ## sendfile on to speed up I/O ops
+  sendfile                     on;
+
+  ## real IP
+  set_real_ip_from             127.0.0.1/32; # for proxied SSL
+  real_ip_header               X-Forwarded-For;
+
+  ## timeouts
+  client_header_timeout        60;
+  client_body_timeout          60;
+  keepalive_timeout            10 10;
+  send_timeout                 60;
+
+  ## reset lingering timed out connections, deflects DDoS
+  reset_timedout_connection    on;
+
+  ## body size
+  client_max_body_size         25m;
+
+  ## TCP options
+  tcp_nodelay                  on;
+  tcp_nopush                   on;
+
+  ## if modified
+  if_modified_since            before;
+
+  ## compression
+  gzip                         on;
+  gzip_http_version            1.1;
+  gzip_comp_level              2;
+  gzip_min_length              10;
+  gzip_proxied                 any;
+  gzip_buffers                 16 8k;
+  gzip_types                   text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript image/x-icon application/vnd.ms-fontobject font/opentype application/x-font-ttf;
+  gzip_disable                 "msie6";
+  gzip_static                  on;
+
+  ## hide NGINX version
+  server_tokens                off;
+
+  ## Use a SSL/TLS cache for SSL session resume. This needs to be
+  ## here (in this context, for session resumption to work. See this
+  ## thread on the Nginx mailing list:
+  ## http://nginx.org/pipermail/nginx/2010-November/023736.html.
+  ssl_session_cache            shared:SSL:10m;
+  ssl_session_timeout          10m;
+
+  map_hash_bucket_size         192;
+  variables_hash_bucket_size   128;
+  variables_hash_max_size      1024;
+
+  ## enable clickjacking protection in modern browsers. available in
+  ## IE8 also. See
+  ## https://developer.mozilla.org/en/The_X-FRAME-OPTIONS_response_header
+  add_header                   X-Frame-Options SAMEORIGIN;
+
+  ## proxy settings
+  proxy_set_header              Host  $host;
+  proxy_set_header              X-Real-IP $remote_addr;
+  proxy_set_header              X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_hide_header             X-Powered-By;
+  proxy_buffers                 8 16k;
+  proxy_buffer_size             32k;
+
+  ## fastcgi settings
+  fastcgi_connect_timeout       60;
+  fastcgi_send_timeout          180;
+  fastcgi_read_timeout          180;
+  fastcgi_buffer_size           128k;
+  fastcgi_buffers               4 256k;
+  fastcgi_busy_buffers_size     256k;
+  fastcgi_temp_file_write_size  256k;
+  fastcgi_intercept_errors      off;
+  fastcgi_hide_header           X-Powered-By;
+  include                       /etc/nginx/fastcgi_params;
+
+  ## connection/request limit zones
+  limit_conn_zone   $binary_remote_addr    zone=connection_limit:10m;
+  limit_req_zone    $binary_remote_addr    zone=request_limit:10m  rate=5r/s;
+
+  ## proxy tmp paths
+  proxy_temp_path     /var/lib/nginx/proxy;
+  fastcgi_temp_path   /var/lib/nginx/fastcgi;
+
+  ## map for allowed methods
+  map $request_method $not_allowed_method {
+    default 1;
+    GET 0;
+    HEAD 0;
+    POST 0;
+    PUT 0;
+    PATCH 0;
+    DELETE 0;
+  }
+
+  ## include all conf.d configs
+  include /etc/nginx/conf.d/*.conf;
+
+  ## include all virtualhosts
+  include /etc/nginx/sites-enabled/*.conf;
+}

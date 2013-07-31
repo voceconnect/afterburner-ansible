@@ -20,7 +20,7 @@
 - name: configure and deploy web servers...
   hosts: web-servers
   user: root
-  #roles:
-  #  - { role: 'nginx', tags: [ 'nginx' ] }
+  roles:
+    - { role: 'nginx', tags: [ 'nginx' ] }
   #  - { role: 'php', tags: [ 'php' ] }
   #  - { role: 'applications', tags: [ 'applications' ] }

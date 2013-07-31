@@ -1,0 +1,6 @@
+---
+- name: nginx update-rc.d
+  shell: update-rc.d nginx defaults
+
+- name: nginx reload
+  service: name=nginx state=reloaded

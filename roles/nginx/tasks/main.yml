@@ -1,0 +1,66 @@
+---
+- name: install nginx
+  apt: pkg={{ item }} state=installed update_cache=yes cache_valid_time=3600
+  with_items:
+    - nginx-common
+    - nginx-extras
+
+- name: ensure directory /var/www
+  file: path=/var/www state=directory owner=root group=root mode=0755
+
+- name: ensure directory /var/www/common
+  file: path=/var/www/common state=directory owner=www-data group=www-data mode=0755
+
+- name: add /etc/nginx/nginx.conf
+  template: >
+    src=etc-nginx-nginx.conf.j2
+    dest=/etc/nginx/nginx.conf
+    owner=root group=root mode=0644
+  notify: nginx reload
+
+- name: add /etc/nginx/conf.d/allowed-maintenance.conf
+  template: >
+    src=etc-nginx-conf.d-allowed-maintenance.conf.j2
+    dest=/etc/nginx/conf.d/allowed-maintenance.conf
+    owner=root group=root mode=0644
+  notify: nginx reload
+
+- name: add /etc/nginx/conf.d/caching.conf
+  template: >
+    src=etc-nginx-conf.d-caching.conf.j2
+    dest=/etc/nginx/conf.d/caching.conf
+    owner=root group=root mode=0644
+  notify: nginx reload
+
+- name: ensure directory nginx cache path
+  file: >
+    path={{ nginxCachePath }} state=directory
+    owner=root group=root mode=0755
+
+- name: remove default provided nginx site
+  file: >
+    path=/etc/nginx/{{ item }}/default state=absent
+  with_items:
+    - sites-enabled
+    - sites-available
+
+- name: add /etc/nginx/sites-available/default.conf
+  template: >
+    src=etc-nginx-sites-available-default.conf.j2
+    dest=/etc/nginx/sites-available/default.conf
+    owner=root group=root mode=0644
+  with_items:
+    - default
+  notify: nginx reload
+
+- name: symlink default site in sites-enabled
+  file: >
+    src=/etc/nginx/sites-available/default.conf
+    dest=/etc/nginx/sites-enabled/default.conf
+    owner=root group=root state=link
+  with_items:
+    - default
+  notify: nginx reload
+
+- name: ensure nginx started
+  service: name=nginx state=started enabled=yes
