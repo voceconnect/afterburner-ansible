@@ -1,0 +1,27 @@
+[default]
+
+prefix = /var/www/common
+user   = www-data
+group  = www-data
+listen = /tmp/php5-fpm.sock
+
+pm                   = dynamic
+pm.max_children      = 5
+pm.start_servers     = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+pm.max_requests      = 100
+pm.status_path       = /fpm/status
+
+ping.path     = /fpm/ping
+ping.response = pong
+
+chdir  = /
+
+catch_workers_output      = yes
+security.limit_extensions = .php .php3 .php4 .php5
+
+env[HOSTNAME] = {{ ansible_fqdn }}
+
+php_flag[display_errors]         = off
+php_admin_flag[log_errors]       = off

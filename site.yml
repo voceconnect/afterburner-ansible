@@ -22,5 +22,5 @@
   user: root
   roles:
     - { role: 'nginx', tags: [ 'nginx' ] }
-  #  - { role: 'php', tags: [ 'php' ] }
+    - { role: 'php', tags: [ 'php' ] }
   #  - { role: 'applications', tags: [ 'applications' ] }

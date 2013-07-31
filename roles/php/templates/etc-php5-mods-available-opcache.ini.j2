@@ -1,0 +1,25 @@
+{% if phpInstallVersion == 5.4 %}
+zend_extension=/usr/lib/php5/20100525/opcache.so
+{% else %}
+zend_extension=/usr/lib/php5/20090626/opcache.so
+{% endif %}
+
+; The OPcache shared memory storage size. The amount of memory for storing
+; precompiled PHP code in Mbytes.
+zend_optimizerplus.memory_consumption=128
+
+; only takes the first instance in the set of prime numbers
+; larger than the supplied value:
+; 223, 463, 983, 1979, 3907, 7963, 16229, 32531, 65407, 130987
+; e.g. with a value of '4000', the max will actually be '7963'
+zend_optimizerplus.max_accelerated_files=7962
+
+; equivalent of apc stat, must call accelerator_reset() or
+; reload the web server for changes to be re-read from the fs when
+; validate_timestamps = 0
+zend_optimizerplus.validate_timestamps=1
+zend_optimizerplus.revalidate_freq=2
+
+zend_optimizerplus.interned_strings_buffer=8
+zend_optimizerplus.fast_shutdown=1
+zend_optimizerplus.enable_cli=1

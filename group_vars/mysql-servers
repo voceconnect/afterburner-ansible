@@ -3,6 +3,8 @@
 # tasked to be a database server (e.g. not sharing resources with other services)
 # you'll need to tweak/alter these values accordingly...
 # it's also recommended to quote all values so that they're interpreted literally
+# if you're not sure, check out https://tools.percona.com for a good place to start
+# then use mysqltuner and tweak accordingly
 mysqlConfiguration:
   default_storage_engine: InnoDB"
   expire_logs_days: "14"

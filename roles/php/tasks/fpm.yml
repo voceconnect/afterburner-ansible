@@ -1,0 +1,45 @@
+---
+- name: install php5-fpm package
+  apt: pkg=php5-fpm state=installed update_cache=yes cache_valid_time=3600
+  notify: php5-fpm update-rc.d
+  tags:
+    - php:fpm
+
+- name: remove default provided fpm pool
+  file: path=/etc/php5/fpm/pool.d/www.conf state=absent
+  tags:
+    - php:fpm
+
+- name: add /etc/php5/fpm/php-fpm.conf
+  template: >
+    src=etc-php5-fpm-php-fpm.conf.j2
+    dest=/etc/php5/fpm/php-fpm.conf
+    owner=root group=root mode=0644
+  notify: php5-fpm reload
+  tags:
+    - php:fpm
+
+- name: add /etc/php5/fpm/php.ini
+  template: >
+    src=etc-php5-fpm-php.ini.j2
+    dest=/etc/php5/fpm/php.ini
+    owner=root group=root mode=0644
+  notify: php5-fpm reload
+  tags:
+    - php:fpm
+
+- name: add /etc/php5/fpm/pool.d/default.conf
+  template: >
+    src=etc-php5-fpm-pool.d-default.conf.j2
+    dest=/etc/php5/fpm/pool.d/default.conf
+    owner=root group=root mode=0644
+  notify: php5-fpm reload
+  tags:
+    - php:fpm
+    - php:fpm-configs
+
+- name: ensure php5-fpm started
+  service: name=php5-fpm state=started enabled=yes
+  tags:
+    - php:fpm
+

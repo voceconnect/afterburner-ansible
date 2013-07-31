@@ -1,6 +1,36 @@
 ---
+# an array of IP addresses/CIDRs allowed to access
+# applications even when the maintenance page is present
 nginxAllowedDuringMaintenance:
   - 192.168.0.0/16
+
+# cache folder prefix for nginx proxy/fastcgi caching
 nginxCachePath: /var/cache/nginx
+
 # recommended: set to (# of cpus * 2)
 nginxWorkerProcesses: 4
+
+# install composer?
+phpInstallComposer: true
+
+# which PHP packages to install
+phpInstallPackages:
+  - php5-cli
+  - php5-common
+  - php5-curl
+  - php5-dev
+  - php5-gd
+  - php5-mcrypt
+  - php5-memcache
+  - php5-mysql
+  - php5-xdebug
+  - php5-xmlrpc
+
+# which version of PHP to install - supported: 5.3, 5.4
+phpInstallVersion: 5.4
+
+# an array of pear packages to install
+phpPearPackages: []
+
+# an array of pecl packages to install
+phpPeclPackages: []
