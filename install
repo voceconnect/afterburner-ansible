@@ -1,0 +1,22 @@
+#!/bin/bash
+##
+## renames the .sample files
+##
+samples=(
+  group_vars/all.sample
+  group_vars/memcached-servers.sample
+  group_vars/mysql-servers.sample
+  group_vars/web-servers.sample
+  hosts.sample
+  ansible.cfg.sample
+)
+for sample in "${samples[@]}"
+do
+  dest="${sample%".sample"}"
+  test -f "${dest}" && \
+    echo "${dest} exists, not copying..." || \
+    (cp "${sample}" "${sample%".sample"}"; echo "created ${dest}")
+done
+
+echo "DONE!"
+exit 0

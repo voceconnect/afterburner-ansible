@@ -49,8 +49,6 @@
     src=etc-nginx-sites-available-default.conf.j2
     dest=/etc/nginx/sites-available/default.conf
     owner=root group=root mode=0644
-  with_items:
-    - default
   notify: nginx reload
 
 - name: symlink default site in sites-enabled
@@ -58,8 +56,6 @@
     src=/etc/nginx/sites-available/default.conf
     dest=/etc/nginx/sites-enabled/default.conf
     owner=root group=root state=link
-  with_items:
-    - default
   notify: nginx reload
 
 - name: ensure nginx started

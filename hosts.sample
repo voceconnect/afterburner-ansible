@@ -1,0 +1,8 @@
+[mysql-servers]
+afterburner.dev
+
+[memcached-servers]
+afterburner.dev
+
+[web-servers]
+afterburner.dev

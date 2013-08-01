@@ -25,6 +25,13 @@
     dest=/etc/nginx/sites-available/{{ applicationName }}.conf
   notify: nginx reload
 
+- name: symlink application in sites-enabled
+  file: >
+    src=/etc/nginx/sites-available/{{ applicationName }}.conf
+    dest=/etc/nginx/sites-enabled/{{ applicationName }}.conf
+    owner=root group=root state=link
+  notify: nginx reload
+
 - name: add /etc/php5/fpm/pool.d application config
   template: >
     src=wordpress-php-fpm-config.j2
@@ -46,6 +53,17 @@
   get_url: >
     url=http://plugins.svn.wordpress.org/memcached/tags/2.0.2/object-cache.php
     dest=/var/www/{{ applicationName }}/wordpress/wp-content/object-cache.php
+    owner=wordpress group=wordpress mode=0644
+
+- name: ensure wordpress core mu-plugins directory
+  file: >
+    path=/var/www/{{ applicationName }}/wordpress/wp-content/mu-plugins
+    owner=wordpress group=wordpress mode=0755
+
+- name: download wordpress nginx-compatibility drop-in plugin
+  get_url: >
+    url=http://plugins.svn.wordpress.org/nginx-compatibility/tags/0.2.5/nginx-compatibility.php
+    dest=/var/www/{{ applicationName }}/wordpress/wp-content/mu-plugins/nginx-compatibility.php
     owner=wordpress group=wordpress mode=0644
 
 - name: update owner/group permissions on wordpress core files

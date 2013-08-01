@@ -25,3 +25,5 @@ env[HOSTNAME] = {{ ansible_fqdn }}
 
 php_flag[display_errors]         = off
 php_admin_flag[log_errors]       = off
+
+php_admin_value[open_basedir]    = /var/www/common:/tmp:/usr/share/php5

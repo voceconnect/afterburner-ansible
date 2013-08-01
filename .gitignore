@@ -5,6 +5,10 @@ ansible.cfg
 hosts
 host_vars/
 
+## ignore all group_vars files, except samples
+group_vars/*
+!group_vars/*.sample
+
 ## vagrant
 .vagrant/
 Vagrantfile

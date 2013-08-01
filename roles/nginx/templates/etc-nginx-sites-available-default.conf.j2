@@ -13,7 +13,7 @@ server {
 ## default server block
 server {
   listen 80;
-  server_name {{ ansible_fqdn }} 127.0.0.1;
+  server_name {{ ansible_hostname }} 127.0.0.1;
 
   ## logs
   access_log /var/log/nginx/default-access.log;

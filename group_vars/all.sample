@@ -42,7 +42,7 @@ wpSunrise: false
 primaryDomain: afterburner-test.dev
 
 # an array of strings for domain names to "listen" on - can include wildcards
-# for multisite sub-domain installs
+# for multisite sub-domain installs. should include primaryDomain
 listenDomains:
   - afterburner-test.dev
 
@@ -64,11 +64,7 @@ domainRedirects:
 #
 # all 'domain' properties in uriRedirects should also exist as string items
 # in the listenDomains array...
-uriRedirects:
-  -
-    domain: afterburner-test.dev
-    src: /alpha
-    dest: /bravo
+uriRedirects: []
 
 # enable or disable full output caching, useful for testing
 outputCache: true
