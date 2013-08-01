@@ -75,3 +75,12 @@ cacheBypassCookies: []
 applicationDBName: "afterburner"
 applicationDBUser: "afterburner"
 applicationDBPass: "renrubretfa"
+
+# the IP address to your mysql server.
+# if setting up a single server, use 127.0.0.1
+mysqlHost: "127.0.0.1"
+
+# the IP addresses of memcached servers.
+# if setting up a single server, use 127.0.0.1
+memcachedHosts:
+  - 127.0.0.1

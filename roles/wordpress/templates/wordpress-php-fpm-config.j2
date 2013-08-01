@@ -15,6 +15,10 @@ pm.max_requests      = 100
 # terminate requests taking 60 seconds
 request_terminate_timeout = 60s
 
+# log requests taking longer than 5 seconds
+request_slowlog_timeout   = 5s
+slowlog                   = /var/www/{{ applicationName }}/tmp/slow.log
+
 chdir  = /
 
 catch_workers_output      = yes

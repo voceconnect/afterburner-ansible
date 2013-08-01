@@ -25,7 +25,7 @@ define('DB_USER', '{{ applicationDBUser }}');
 define('DB_PASSWORD', '{{ applicationDBPass }}');
 
 /** MySQL hostname */
-define('DB_HOST', '127.0.0.1');
+define('DB_HOST', '{{ mysqlHost }}');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -38,7 +38,7 @@ define('WP_POST_REVISIONS', 5);
 define('EMPTY_TRASH_DAYS', 30);
 
 // ** memcached servers ** //
-$memcached_servers = array('127.0.0.1');
+$memcached_servers = array( "{{ memcachedHosts|join('","') }}" );
 
 // ** multisite settings ** //
 {% if isMultisite %}

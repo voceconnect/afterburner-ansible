@@ -1,18 +1,25 @@
 ---
-# these settings are recommended for a 4GB RAM virtual instance that is only
-# tasked to be a database server (e.g. not sharing resources with other services)
+# IMPORTANT! change your mysql root user password
+mysqlRootUsername: "_root"
+mysqlRootPassword: "ZOMGchangeme"
+
+# these settings are recommended for MySQL to consume 1GB of RAM on a
+# virtual instance that shares it's load with other resources (php-fpm, memcached, etc.)
+#
 # you'll need to tweak/alter these values accordingly...
+#
 # it's also recommended to quote all values so that they're interpreted literally
+#
 # if you're not sure, check out https://tools.percona.com for a good place to start
 # then use mysqltuner and tweak accordingly
 mysqlConfiguration:
   default_storage_engine: "InnoDB"
   expire_logs_days: "14"
-  innodb_buffer_pool_size: "2G"
+  innodb_buffer_pool_size: "592M"
   innodb_file_per_table: "1"
-  innodb_flush_log_at_trx_commit: "1"
+  innodb_flush_log_at_trx_commit: "2"
   innodb_flush_method: "O_DIRECT"
-  innodb_log_file_size: "128M"
+  innodb_log_file_size: "64M"
   innodb_log_files_in_group: "2"
   key_buffer_size: "32M"
   log_bin: "/var/lib/mysql/mysql-bin"
@@ -37,5 +44,3 @@ mysqlConfiguration:
   thread_cache_size: "50"
   tmp_table_size: "32M"
   user: "mysql"
-mysqlRootUsername: _root
-mysqlRootPassword: ZOMGchangeme
