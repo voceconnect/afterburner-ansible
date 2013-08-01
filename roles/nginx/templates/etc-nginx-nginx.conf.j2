@@ -80,13 +80,14 @@ http {
   ## enable clickjacking protection in modern browsers. available in
   ## IE8 also. See
   ## https://developer.mozilla.org/en/The_X-FRAME-OPTIONS_response_header
-  add_header                   X-Frame-Options SAMEORIGIN;
+  add_header                    X-Frame-Options SAMEORIGIN;
 
   ## proxy settings
   proxy_set_header              Host  $host;
   proxy_set_header              X-Real-IP $remote_addr;
   proxy_set_header              X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_hide_header             X-Powered-By;
+  proxy_hide_header             X-Frame-Options;
   proxy_buffers                 8 16k;
   proxy_buffer_size             32k;
 
@@ -100,6 +101,7 @@ http {
   fastcgi_temp_file_write_size  256k;
   fastcgi_intercept_errors      off;
   fastcgi_hide_header           X-Powered-By;
+  fastcgi_hide_header           X-Frame-Options;
   include                       /etc/nginx/fastcgi_params;
 
   ## connection/request limit zones
