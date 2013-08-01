@@ -58,7 +58,7 @@
 - name: ensure wordpress core mu-plugins directory
   file: >
     path=/var/www/{{ applicationName }}/wordpress/wp-content/mu-plugins
-    owner=wordpress group=wordpress mode=0755
+    owner=wordpress group=wordpress mode=0755 state=directory
 
 - name: download wordpress nginx-compatibility drop-in plugin
   get_url: >

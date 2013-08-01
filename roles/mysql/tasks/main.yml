@@ -107,12 +107,12 @@
     src=wordpress.sql.j2
     dest=/tmp/wordpress.sql
     owner=root group=root mode=0700
-  when: isMultisite == False and importWordPressSQL
+  when: isMultisite == false and importWordPressSQL == "yes"
 
 - name: import wordpress.sql
   shell: >
     mysql {{ applicationDBName }} < /tmp/wordpress.sql
-  when: isMultisite == False and importWordPressSQL
+  when: isMultisite == false and importWordPressSQL == "yes"
 
 - name: remove wordpress.sql
   file: path=/tmp/wordpress.sql state=absent

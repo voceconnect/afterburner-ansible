@@ -109,12 +109,6 @@
     user=root state=present
     minute="30" hour="6"
 
-- name: add /etc/hosts
-  template: >
-    src=etc-hosts.j2
-    dest=/etc/hosts
-    owner=root group=root mode=0644
-
 - name: add /etc/security/limits.conf
   copy: >
     src=etc-security-limits.conf
