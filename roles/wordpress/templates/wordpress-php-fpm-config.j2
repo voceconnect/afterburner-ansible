@@ -34,5 +34,5 @@ php_admin_flag[log_errors]       = on
 
 ## php_admin_values
 php_admin_value[error_reporting] = E_ALL & ~E_STRICT
-php_admin_value[open_basedir]    = /var/www/{{ applicationName }}:/usr/share/php5
+php_admin_value[open_basedir]    = /var/www/{{ applicationName }}/htdocs:/var/www/{{ applicationName }}/tmp:/usr/share/php5
 php_admin_value[upload_tmp_dir]  = /var/www/{{ applicationName }}/tmp

@@ -23,7 +23,6 @@ phpInstallPackages:
   - php5-mcrypt
   - php5-memcache
   - php5-mysql
-  - php5-xdebug
   - php5-xmlrpc
 
 # which version of PHP to install - supported: 5.3, 5.4

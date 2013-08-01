@@ -31,7 +31,6 @@ mysqlConfiguration:
   skip_name_resolve: "~"
   slow_query_log: "1"
   slow_query_log_file: "/var/lib/mysql/mysql-slow.log"
-  sql_mode: STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY"
   sync_binlog: "1"
   sysdate_is_now: "1"
   table_definition_cache: "1024"

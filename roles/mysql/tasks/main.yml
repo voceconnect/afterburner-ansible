@@ -94,10 +94,25 @@
 - name: add mysql application user
   mysql_user: >
     state=present
-    user={{ applicationDBUser }}
+    user={{ applicationDBUser|truncate(13, False, '') }}
     password={{ applicationDBPass }}
     host="%"
     priv={{ applicationDBName }}.*:ALL,GRANT
 
 - name: ensure mysql started
   service: name=mysql state=started enabled=yes
+
+- name: copy wordpress.sql for importing
+  template: >
+    src=wordpress.sql.j2
+    dest=/tmp/wordpress.sql
+    owner=root group=root mode=0700
+  when: isMultisite == False and importWordPressSQL == true
+
+- name: import wordpress.sql
+  shell: >
+    mysql {{ applicationDBName }} < /tmp/wordpress.sql
+  when: isMultisite == False and importWordPressSQL == true
+
+- name: remove wordpress.sql
+  file: path=/tmp/wordpress.sql state=absent

@@ -1,18 +1,18 @@
 ---
-- name: add application level user
+- name: add system 'wordpress' user
   user: >
-    name={{ applicationName }} state=present system=false
-    home=/var/www/{{ applicationName }} shell=/usr/sbin/nologin
+    name=wordpress state=present system=false
+    createhome=false shell=/usr/sbin/nologin
 
 - name: ensure directory /var/www/app
   file: >
     path=/var/www/{{ applicationName }} state=directory
-    owner={{ applicationName }} group={{ applicationName }} mode=0755
+    owner=wordpress group=wordpress mode=0755
 
 - name: ensure directory /var/www/app/htdocs
   file: >
     path=/var/www/{{ applicationName }}/htdocs state=directory
-    owner={{ applicationName }} group={{ applicationName }} mode=0755
+    owner=wordpress group=wordpress mode=0755
 
 - name: ensure directory /var/www/app/tmp
   file: >
@@ -30,3 +30,51 @@
     src=wordpress-php-fpm-config.j2
     dest=/etc/php5/fpm/pool.d/{{ applicationName }}.conf
   notify: php5-fpm reload
+
+- name: download wordpress core
+  get_url: >
+    url=http://wordpress.org/latest.tar.gz
+    dest=/var/www/{{ applicationName }}/latest.tar.gz
+
+- name: extract wordpress core
+  shell: >
+    chdir=/var/www/{{ applicationName }}
+    creates=/var/www/{{ applicationName }}/wordpress
+    /bin/tar -xzf latest.tar.gz
+
+- name: download wordpress object-cache drop-in plugin
+  get_url: >
+    url=http://plugins.svn.wordpress.org/memcached/tags/2.0.2/object-cache.php
+    dest=/var/www/{{ applicationName }}/wordpress/wp-content/object-cache.php
+    owner=wordpress group=wordpress mode=0644
+
+- name: update owner/group permissions on wordpress core files
+  file: >
+    path=/var/www/{{ applicationName }}/wordpress
+    owner=wordpress group=wordpress state=directory recurse=yes
+
+- name: rsync core files into web application root
+  shell: >
+    rsync -lrtpog /var/www/{{ applicationName }}/wordpress/*
+    /var/www/{{ applicationName }}/htdocs/
+
+- name: retrieve authentication keys and salts
+  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
+  register: wpSalts
+
+- name: add application wp-config.php
+  template: >
+    src=wordpress-wp-config.php.j2
+    dest=/var/www/{{ applicationName }}/htdocs/wp-config.php
+    owner=wordpress group=wordpress mode=0644
+
+- name: ensure /var/www/application/htdocs/wp-content/uploads directory
+  file: >
+    path=/var/www/{{ applicationName }}/htdocs/wp-content/uploads
+    owner=www-data group=wordpress state=directory mode=0775 recurse=yes
+
+- name: ensure /var/www/application/htdocs/wp-content/blogs.dir directory
+  file: >
+    path=/var/www/{{ applicationName }}/htdocs/wp-content/blogs.dir
+    owner=www-data group=wordpress state=directory mode=0775 recurse=yes
+  when: isMultisite
