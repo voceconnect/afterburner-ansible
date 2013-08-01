@@ -1,0 +1,32 @@
+---
+- name: add application level user
+  user: >
+    name={{ applicationName }} state=present system=false
+    home=/var/www/{{ applicationName }} shell=/usr/sbin/nologin
+
+- name: ensure directory /var/www/app
+  file: >
+    path=/var/www/{{ applicationName }} state=directory
+    owner={{ applicationName }} group={{ applicationName }} mode=0755
+
+- name: ensure directory /var/www/app/htdocs
+  file: >
+    path=/var/www/{{ applicationName }}/htdocs state=directory
+    owner={{ applicationName }} group={{ applicationName }} mode=0755
+
+- name: ensure directory /var/www/app/tmp
+  file: >
+    path=/var/www/{{ applicationName }}/tmp state=directory
+    owner=nobody group=nogroup mode=777
+
+- name: add /etc/nginx/sites-available application config
+  template: >
+    src=wordpress-nginx-config.j2
+    dest=/etc/nginx/sites-available/{{ applicationName }}.conf
+  notify: nginx reload
+
+- name: add /etc/php5/fpm/pool.d application config
+  template: >
+    src=wordpress-php-fpm-config.j2
+    dest=/etc/php5/fpm/pool.d/{{ applicationName }}.conf
+  notify: php5-fpm reload

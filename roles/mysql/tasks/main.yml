@@ -84,5 +84,20 @@
 - name: delete the mysql test database
   mysql_db: db=test state=absent
 
+- name: add mysql application database
+  mysql_db: >
+    db={{ applicationDBName }}
+    state=present
+    encoding=utf8
+    collation=utf8_general_ci
+
+- name: add mysql application user
+  mysql_user: >
+    state=present
+    user={{ applicationDBUser }}
+    password={{ applicationDBPass }}
+    host="%"
+    priv={{ applicationDBName }}.*:ALL,GRANT
+
 - name: ensure mysql started
   service: name=mysql state=started enabled=yes

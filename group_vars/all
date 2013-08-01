@@ -1,5 +1,8 @@
 ---
+# additional packages to install on all hosts
 additionalPackages: []
+
+# packages held from auto update
 heldPackages:
   - libmysqlclient-dev
   - linux-*
@@ -7,5 +10,58 @@ heldPackages:
   - nginx*
   - percona-*
   - php5-*
+
+# ssh listening port
 sshListenPort: 22
+
+# system timezone
 timezone: Etc/UTC
+
+# name of the application, used in setting directories and a system
+# level user that be the owner/group on application files
+applicationName: afterburner
+
+# the main domain name of the application - used to create the first
+# site in a multisite install
+primaryDomain: afterburner.dev
+
+# an array of strings for domain names to "listen" on - can include wildcards
+# for multisite sub-domain installs
+listenDomains:
+  - afterburner.dev
+
+# domain names to listen on and redirect - these are domains that don't have
+# any rewrite rules and don't need to send requests to a backend. useful for
+# redirecting www domains to non-www domains
+domainRedirects:
+  -
+    src: www.afterburner.dev
+    dest: afterburner.dev
+
+# an array of objects that indicate what domain name should trigger a specified
+# redirect - for example:
+# uriRedirects:
+#   -
+#     domain: afterburner.dev
+#     src: /some-url-alpha
+#     dest: /some-url-bravo
+#
+# all 'domain' properties in uriRedirects should also exist as string items
+# in the listenDomains array...
+uriRedirects:
+  -
+    domain: afterburner.dev
+    src: /alpha
+    dest: /bravo
+
+# enable or disable full output caching, useful for testing
+outputCache: true
+
+# an array of strings/regular expressions for cookies that should bypass
+# output level caching. array items are joined with "|"
+cacheBypassCookies: []
+
+# mysql database information for application
+applicationDBName: afterburner
+applicationDBUser: afterburner
+applicationDBPass: renrubretfa
