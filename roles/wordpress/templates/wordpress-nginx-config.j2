@@ -121,6 +121,12 @@ server {
 
   ## rewrite rules
   rewrite /wp-admin$ $scheme://$host$uri/ permanent;
+{% if isMultisite and not isSubdomainInstall %}
+  if (!-e $request_filename) {
+    rewrite ^(/[^/]+)?(/wp-.*) $2 last;
+    rewrite ^(/[^/]+)?(/.*\.php) $2 last;
+  }
+{% endif %}
 
   ## set document root
   root /var/www/{{ applicationName }}/htdocs;
@@ -163,6 +169,13 @@ server {
 
     ## add cache/miss hit header
     more_set_headers      "X-Cache-Info: static";
+
+{% if isMultisite and not isSubdomainInstall %}
+    ## wordpress multisite in a sub-folder static rewrites
+    rewrite ^.+(/wp-admin/.+)$ $1 break;
+    rewrite ^.+(/wp-content/.+)$ $1 break;
+    rewrite ^.+(/wp-includes/.+)$ $1 break;
+{% endif %}
 
     try_files $uri =404;
   }

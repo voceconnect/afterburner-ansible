@@ -42,7 +42,7 @@ wpSunrise: false
 primaryDomain: afterburner-test.dev
 
 # an array of strings for domain names to "listen" on - can include wildcards
-# for multisite sub-domain installs. should include primaryDomain
+# for multisite sub-domain installs. must include primaryDomain
 listenDomains:
   - afterburner-test.dev
 

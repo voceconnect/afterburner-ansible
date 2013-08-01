@@ -114,5 +114,17 @@
     mysql {{ applicationDBName }} < /tmp/wordpress.sql
   when: isMultisite == false and importWordPressSQL == "yes"
 
+- name: copy wordpress-multisite.sql for importing
+  template: >
+    src=wordpress-multisite.sql.j2
+    dest=/tmp/wordpress-multisite.sql
+    owner=root group=root mode=0700
+  when: isMultisite == true and importWordPressSQL == "yes"
+
+- name: import wordpress-multisite.sql
+  shell: >
+    mysql {{ applicationDBName }} < /tmp/wordpress-multisite.sql
+  when: isMultisite == true and importWordPressSQL == "yes"
+
 - name: remove wordpress.sql
   file: path=/tmp/wordpress.sql state=absent

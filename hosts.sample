@@ -1,8 +1,8 @@
 [mysql-servers]
-afterburner.dev
+afterburner-test.dev
 
 [memcached-servers]
-afterburner.dev
+afterburner-test.dev
 
 [web-servers]
-afterburner.dev
+afterburner-test.dev
