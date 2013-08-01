@@ -26,7 +26,7 @@ importWordPressSQL: false
 applicationName: "afterburner"
 
 # your email address
-wpAdminEmail: "sean@voceconnect.com"
+wpAdminEmail: "you@example.com"
 
 # is the application a multisite install?
 isMultisite: false
