@@ -5,7 +5,7 @@ Ansible playbooks to configure a finely tuned WordPress stack.
 ## Requirements
 
 * Ubuntu 12.04
-* SSH Access to remote hosts
+* SSH Access to remote hosts as 'root'
 * Ansible
 
 ## Setup

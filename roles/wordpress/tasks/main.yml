@@ -90,9 +90,3 @@
   file: >
     path=/var/www/{{ applicationName }}/htdocs/wp-content/uploads
     owner=www-data group=wordpress state=directory mode=0775 recurse=yes
-
-- name: ensure /var/www/application/htdocs/wp-content/blogs.dir directory
-  file: >
-    path=/var/www/{{ applicationName }}/htdocs/wp-content/blogs.dir
-    owner=www-data group=wordpress state=directory mode=0775 recurse=yes
-  when: isMultisite

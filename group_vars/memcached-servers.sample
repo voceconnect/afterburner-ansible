@@ -3,4 +3,4 @@ memcachedConnections: 8192
 memcachedListenIP: "127.0.0.1"
 memcachedListenPort: 11211
 memcachedMemoryLimit: 128
-memcachedUser: memcache
+memcachedUser: "memcache"

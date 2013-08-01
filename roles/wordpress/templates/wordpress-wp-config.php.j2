@@ -42,9 +42,6 @@ $memcached_servers = array('127.0.0.1');
 
 // ** multisite settings ** //
 {% if isMultisite %}
-{% if wpSunrise %}
-define( 'SUNRISE', 'on' );
-{% endif %}
 define( 'MULTISITE', true );
 define( 'SUBDOMAIN_INSTALL', {{ 'true' if isSubdomainInstall else 'false' }} );
 $base = '/';
