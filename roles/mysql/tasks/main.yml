@@ -62,7 +62,7 @@
 - name: add password to /root/.my.cnf
   ini_file: >
     dest=/root/.my.cnf section=client
-    option=pass value={{ mysqlRootPassword }}
+    option=password value={{ mysqlRootPassword }}
 
 - name: delete the mysql root user for ipv6 localhost (::1)
   mysql_user: user="root" host="::1" state="absent"
@@ -102,29 +102,34 @@
 - name: ensure mysql started
   service: name=mysql state=started enabled=yes
 
+- name: check if database contains tables
+  shell: >
+    /usr/bin/mysql -Bse "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '{{ applicationDBName }}';"
+  register: countAppDatabaseTables
+
 - name: copy wordpress.sql for importing
   template: >
     src=wordpress.sql.j2
     dest=/tmp/wordpress.sql
     owner=root group=root mode=0700
-  when: isMultisite == false and importWordPressSQL == "yes"
+  when: isMultisite == false and countAppDatabaseTables.stdout == "0"
 
 - name: import wordpress.sql
   shell: >
     mysql {{ applicationDBName }} < /tmp/wordpress.sql
-  when: isMultisite == false and importWordPressSQL == "yes"
+  when: isMultisite == false and countAppDatabaseTables.stdout == "0"
 
 - name: copy wordpress-multisite.sql for importing
   template: >
     src=wordpress-multisite.sql.j2
     dest=/tmp/wordpress-multisite.sql
     owner=root group=root mode=0700
-  when: isMultisite == true and importWordPressSQL == "yes"
+  when: isMultisite == true and countAppDatabaseTables.stdout == "0"
 
 - name: import wordpress-multisite.sql
   shell: >
     mysql {{ applicationDBName }} < /tmp/wordpress-multisite.sql
-  when: isMultisite == true and importWordPressSQL == "yes"
+  when: isMultisite == true and countAppDatabaseTables.stdout == "0"
 
 - name: remove wordpress.sql
   file: path=/tmp/wordpress.sql state=absent
