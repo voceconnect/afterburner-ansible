@@ -1,0 +1,84 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box      = "afterburner-vm"
+
+  config.vm.box_url  = "http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-vagrant-amd64-disk1.box"
+  config.vm.hostname = "afterburner.local"
+
+  config.vm.network  :private_network, ip: "192.168.254.254"
+
+  config.vm.provider :virtualbox do |vb|
+    vb.gui = false
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+  end
+
+  #
+  # if you wish to setup 2 virtualbox instances, with one instance
+  # responsible for database and the other for web, un-comment everything in
+  # between the BEGIN and END multi-server settings comment lines,
+  # and comment out the above settings
+  #
+  # you'll also need to update your ansible 'hosts' and add 'host_vars/' files
+  # for each host. the 'mysqlHost' var in group_vars/all' will need to be
+  # updated to point to 192.168.254.253, or the private network IP of the
+  # mysql virtualbox specified below
+  #
+  # example host_vars files, assuming the current settings in the below vms:
+  #
+  # => host_vars/web.afterburner.local
+  # ansible_ssh_host: 192.168.254.254
+  # ansible_ssh_port: 22
+  # ansible_ssh_user: vagrant
+  # ansible_ssh_private_key_file: /Users/your_username/.ssh/vagrant
+  #
+  # => host_vars/db.afterburner.local
+  # ansible_ssh_host: 192.168.254.253
+  # ansible_ssh_port: 22
+  # ansible_ssh_user: vagrant
+  # ansible_ssh_private_key_file: /Users/your_username/.ssh/vagrant
+
+  #
+  # BEGIN multi-server settings
+  #
+  #config.vm.define :web do |web|
+  #  web.vm.box      = "afterburner-web"
+  #  web.vm.box_url  = "http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-vagrant-amd64-disk1.box"
+  #  web.vm.hostname = "web.afterburner.local"
+  #  web.vm.network  :private_network, ip: "192.168.254.254"
+
+  #  web.vm.provider :virtualbox do |vb|
+  #    vb.gui = false
+  #    vb.customize ["modifyvm", :id, "--memory", "512"]
+  #    vb.customize ["modifyvm", :id, "--cpus", "2"]
+  #  end
+  #end
+
+  #config.vm.define :mysql do |mysql|
+  #  mysql.vm.box      = "afterburner-db"
+  #  mysql.vm.box_url  = "http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-vagrant-amd64-disk1.box"
+  #  mysql.vm.hostname = "db.afterburner.local"
+  #  mysql.vm.network  :private_network, ip: "192.168.254.253"
+
+  #  mysql.vm.provider :virtualbox do |vb|
+  #    vb.gui = false
+  #    vb.customize ["modifyvm", :id, "--memory", "1024"]
+  #    vb.customize ["modifyvm", :id, "--cpus", "1"]
+  #  end
+  #end
+  #
+  # END multi-server settings
+  #
+
+  config.ssh.private_key_path = "#{ENV['HOME']}/.ssh/vagrant"
+
+  config.dns.tld = "dev"
+  config.dns.patterns = [/^.*afterburner-test\.dev$/]
+
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = 'site.yml'
+    ansible.sudo     = true
+  end
+end

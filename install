@@ -9,6 +9,7 @@ samples=(
   group_vars/web-servers.sample
   hosts.sample
   ansible.cfg.sample
+  Vagrantfile.sample
 )
 for sample in "${samples[@]}"
 do

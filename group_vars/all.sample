@@ -17,10 +17,6 @@ sshListenPort: 22
 # system timezone
 timezone: "Etc/UTC"
 
-# should the default wordpress SQL data be imported? useful for
-# re-installing/rolling back to a fresh install. best overridden with --extra-vars
-importWordPressSQL: false
-
 # name of the application, used in setting directories and a system
 # level user that be the owner/group on application files
 applicationName: "afterburner"
@@ -30,7 +26,7 @@ adminEmail: "you@example.com"
 
 # an array of strings for IP addresses that should be whitelisted by fail2ban
 fail2banWhiteList:
-  - "192.168.33.1"
+  - "192.168.254.1"
 
 # is the application a multisite install?
 isMultisite: false
