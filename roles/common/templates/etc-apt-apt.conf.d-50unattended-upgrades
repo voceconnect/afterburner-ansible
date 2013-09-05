@@ -11,10 +11,6 @@ Unattended-Upgrade::Package-Blacklist {
 {% for package in heldPackages %}
   "{{ package }}";
 {% endfor %}
-//  "vim";
-//  "libc6";
-//  "libc6-dev";
-//  "libc6-i686";
 };
 
 // This option allows you to control if on a unclean dpkg exit

@@ -18,7 +18,7 @@ Afterburner sets up a WordPress installation for http://afterburner-test.dev on 
 
 1. Clone this repo and `cd afterburner-ansible`
 2. Run `./install`. (this copies `.sample` files for editing)
-3. Edit `group_vars/all` and update `wpAdminEmail` to your email.
+3. Edit `group_vars/all` and update `adminEmail` to your email.
 4. If you are setting up the default domain, `afterburner-test.dev`, no other changes are needed, though you may want to examine the contents of `/group_vars/` files, `hosts` and `ansible.cfg` to review the existing variables that are set.
 5. Execute `ansible all -m ping` to ensure Ansible can connect to your hosts
 6. Run `ansible-playbook site.yml --extra-vars="importWordPressSQL=yes"` Adding the `importWordPressSQL` variable loads an empty WordPress database, and only needs to be run the first time (otherwise it will replace the existing database).

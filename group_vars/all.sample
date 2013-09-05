@@ -26,7 +26,11 @@ importWordPressSQL: false
 applicationName: "afterburner"
 
 # your email address
-wpAdminEmail: "you@example.com"
+adminEmail: "you@example.com"
+
+# an array of strings for IP addresses that should be whitelisted by fail2ban
+fail2banWhiteList:
+  - "192.168.33.1"
 
 # is the application a multisite install?
 isMultisite: false

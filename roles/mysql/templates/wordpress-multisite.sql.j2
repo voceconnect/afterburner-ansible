@@ -206,7 +206,7 @@ INSERT INTO `wp_options` VALUES (1,'siteurl','http://{{ primaryDomain }}','yes')
 INSERT INTO `wp_options` VALUES (2,'blogname','{{ primaryDomain }}','yes');
 INSERT INTO `wp_options` VALUES (3,'blogdescription','Just another WordPress site','yes');
 INSERT INTO `wp_options` VALUES (4,'users_can_register','0','yes');
-INSERT INTO `wp_options` VALUES (5,'admin_email','{{ wpAdminEmail }}','yes');
+INSERT INTO `wp_options` VALUES (5,'admin_email','{{ adminEmail }}','yes');
 INSERT INTO `wp_options` VALUES (6,'start_of_week','1','yes');
 INSERT INTO `wp_options` VALUES (7,'use_balanceTags','0','yes');
 INSERT INTO `wp_options` VALUES (8,'use_smilies','1','yes');
@@ -496,7 +496,7 @@ CREATE TABLE `wp_sitemeta` (
 LOCK TABLES `wp_sitemeta` WRITE;
 /*!40000 ALTER TABLE `wp_sitemeta` DISABLE KEYS */;
 INSERT INTO `wp_sitemeta` VALUES (1,1,'site_name','{{ primaryDomain }} Sites');
-INSERT INTO `wp_sitemeta` VALUES (2,1,'admin_email','{{ wpAdminEmail }}');
+INSERT INTO `wp_sitemeta` VALUES (2,1,'admin_email','{{ adminEmail }}');
 INSERT INTO `wp_sitemeta` VALUES (3,1,'admin_user_id','1');
 INSERT INTO `wp_sitemeta` VALUES (4,1,'registration','none');
 INSERT INTO `wp_sitemeta` VALUES (5,1,'upload_filetypes','jpg jpeg png gif mp3 mov avi wmv midi mid pdf');
@@ -681,7 +681,7 @@ CREATE TABLE `wp_users` (
 
 LOCK TABLES `wp_users` WRITE;
 /*!40000 ALTER TABLE `wp_users` DISABLE KEYS */;
-INSERT INTO `wp_users` VALUES (1,'admin','$P$BFFMv53NmgpBH9Irmd2kZGZboWGBy70','admin','{{ wpAdminEmail }}','','2013-08-01 14:51:37','',0,'admin',0,0);
+INSERT INTO `wp_users` VALUES (1,'admin','$P$BFFMv53NmgpBH9Irmd2kZGZboWGBy70','admin','{{ adminEmail }}','','2013-08-01 14:51:37','',0,'admin',0,0);
 /*!40000 ALTER TABLE `wp_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

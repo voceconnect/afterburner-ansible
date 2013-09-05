@@ -21,6 +21,7 @@
     - checkinstall
     - cpp
     - curl
+    - fail2ban
     - flex
     - g++
     - gcc
@@ -72,6 +73,7 @@
     - python-software-properties
     - python-setuptools
     - rdate
+    - rkhunter
     - rsync
     - rsyslog
     - rsyslog-gnutls
@@ -109,44 +111,12 @@
     user=root state=present
     minute="30" hour="6"
 
-- name: add /etc/security/limits.conf
-  copy: >
-    src=etc-security-limits.conf
-    dest=/etc/security/limits.conf
-    owner=root group=root mode=0644
-
 - name: add /etc/sysctl.d/99-tuning.conf
   copy: >
     src=etc-sysctl.d-99-tuning.conf
     dest=/etc/sysctl.d/99-tuning.conf
     owner=root group=root mode=0644
   notify: start procps
-
-- name: add /etc/apt/apt.conf.d/10periodic
-  copy: >
-    src=etc-apt-apt.conf.d-10periodic
-    dest=/etc/apt/apt.conf.d/10periodic
-    owner=root group=root mode=0644
-
-- name: add /etc/apt/apt.conf.d/50unattended-upgrades
-  template: >
-    src=etc-apt-apt.conf.d-50unattended-upgrades
-    dest=/etc/apt/apt.conf.d/50unattended-upgrades
-    owner=root group=root mode=0644
-
-- name: add /etc/ssh/sshd_config
-  template: >
-    src=etc-ssh-sshd_config.j2
-    dest=/etc/ssh/sshd_config
-    owner=root group=root mode=0644
-  notify:
-    - ssh restart
-
-- name: add /etc/ssh/ssh_config
-  copy: >
-    src=etc-ssh-ssh_config
-    dest=/etc/ssh/ssh_config
-    owner=root group=root mode=0644
 
 - name: update /etc/pam.d/common-session
   lineinfile: >
@@ -157,3 +127,5 @@
 
 - name: ensure ssh is started
   service: name=ssh state=started enabled=yes
+
+- include: security.yml

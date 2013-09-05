@@ -145,7 +145,7 @@ INSERT INTO `wp_options` VALUES (1,'siteurl','http://{{ primaryDomain }}','yes')
 INSERT INTO `wp_options` VALUES (2,'blogname','{{ primaryDomain }}','yes');
 INSERT INTO `wp_options` VALUES (3,'blogdescription','Just another WordPress site','yes');
 INSERT INTO `wp_options` VALUES (4,'users_can_register','0','yes');
-INSERT INTO `wp_options` VALUES (5,'admin_email','{{ wpAdminEmail }}','yes');
+INSERT INTO `wp_options` VALUES (5,'admin_email','{{ adminEmail }}','yes');
 INSERT INTO `wp_options` VALUES (6,'start_of_week','1','yes');
 INSERT INTO `wp_options` VALUES (7,'use_balanceTags','0','yes');
 INSERT INTO `wp_options` VALUES (8,'use_smilies','1','yes');
@@ -474,7 +474,7 @@ CREATE TABLE `wp_users` (
 
 LOCK TABLES `wp_users` WRITE;
 /*!40000 ALTER TABLE `wp_users` DISABLE KEYS */;
-INSERT INTO `wp_users` VALUES (1,'admin','$P$BFFMv53NmgpBH9Irmd2kZGZboWGBy70','admin','{{ wpAdminEmail }}','','2013-08-01 04:04:31','',0,'admin');
+INSERT INTO `wp_users` VALUES (1,'admin','$P$BFFMv53NmgpBH9Irmd2kZGZboWGBy70','admin','{{ adminEmail }}','','2013-08-01 04:04:31','',0,'admin');
 /*!40000 ALTER TABLE `wp_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
