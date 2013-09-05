@@ -1,6 +1,8 @@
 # Afterburner
 
-Afterburner is a set of Ansible playbooks and tasks that complement the resources and guides at [afterburner.voceplatforms.com](http://afterburner.voceplatforms.com).
+See how [Voce Platforms](http://voceplatforms.com/) makes WordPress fly for large, high-traffic, high-profile sites. From server configuration to must-have WordPress plugins to front end optimizations, you'll learn how to make WordPress scale, reduce server resources, and load quickly.
+
+`afterburner-ansible` is a set of Ansible playbooks and tasks that complement the resources, guides and recommendations at [afterburner.voceplatforms.com](http://afterburner.voceplatforms.com).
 
 ## What's included?
 
