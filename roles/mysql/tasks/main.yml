@@ -84,52 +84,7 @@
 - name: delete the mysql test database
   mysql_db: db=test state=absent
 
-- name: add mysql application database
-  mysql_db: >
-    db={{ applicationDBName }}
-    state=present
-    encoding=utf8
-    collation=utf8_general_ci
-
-- name: add mysql application user
-  mysql_user: >
-    state=present
-    user={{ applicationDBUser|truncate(13, False, '') }}
-    password={{ applicationDBPass }}
-    host="%"
-    priv={{ applicationDBName }}.*:ALL,GRANT
-
 - name: ensure mysql started
   service: name=mysql state=started enabled=yes
 
-- name: check if database contains tables
-  shell: >
-    /usr/bin/mysql -Bse "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '{{ applicationDBName }}';"
-  register: countAppDatabaseTables
-
-- name: copy wordpress.sql for importing
-  template: >
-    src=wordpress.sql.j2
-    dest=/tmp/wordpress.sql
-    owner=root group=root mode=0700
-  when: isMultisite == false and countAppDatabaseTables.stdout == "0"
-
-- name: import wordpress.sql
-  shell: >
-    mysql {{ applicationDBName }} < /tmp/wordpress.sql
-  when: isMultisite == false and countAppDatabaseTables.stdout == "0"
-
-- name: copy wordpress-multisite.sql for importing
-  template: >
-    src=wordpress-multisite.sql.j2
-    dest=/tmp/wordpress-multisite.sql
-    owner=root group=root mode=0700
-  when: isMultisite == true and countAppDatabaseTables.stdout == "0"
-
-- name: import wordpress-multisite.sql
-  shell: >
-    mysql {{ applicationDBName }} < /tmp/wordpress-multisite.sql
-  when: isMultisite == true and countAppDatabaseTables.stdout == "0"
-
-- name: remove wordpress.sql
-  file: path=/tmp/wordpress.sql state=absent
+- include: application.yml
