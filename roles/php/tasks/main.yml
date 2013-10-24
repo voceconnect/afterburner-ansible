@@ -2,16 +2,16 @@
 - name: add dotdeb apt key for php 5.4
   apt_key: >
     url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7E3F070089DF5277 state=present
-  when: "phpInstallVersion == 5.4"
+  when: phpInstallVersion == 5.4
 
 - name: add dotdeb package sources for php 5.4
   apt_repository: >
     repo='deb http://packages.dotdeb.org squeeze-php54 all' state=present
-  when: "phpInstallVersion == 5.4"
+  when: phpInstallVersion == 5.4
 
 - name: install php packages
   apt: >
-    pkg={{ item }} state=installed update_cache=yes cache_valid_time=3600
+    pkg={{ item }} state=installed update_cache=yes
   with_items: $phpInstallPackages
 
 - name: add /etc/php5/cli/php.ini
