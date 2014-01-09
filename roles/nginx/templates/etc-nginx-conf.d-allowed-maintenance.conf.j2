@@ -1,9 +1,0 @@
-geo $allowed_during_maintenance {
-  default 0;
-  127.0.0.1          1;  # allow on the loopback
-  {{ ansible_default_ipv4.address }}  1;  # allow eth0
-
-{% for allowed_ip in nginxAllowedDuringMaintenance %}
-  {{ allowed_ip }} 1;
-{% endfor %}
-}
