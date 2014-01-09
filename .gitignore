@@ -5,6 +5,9 @@ ansible.cfg
 hosts
 host_vars/
 
+## ignore all roles, install from ansible-galaxy
+roles/
+
 ## ignore all group_vars files, except samples
 group_vars/*
 !group_vars/*.sample
