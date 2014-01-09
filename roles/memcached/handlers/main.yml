@@ -1,6 +1,0 @@
----
-- name: memcached update-rc.d
-  shell: update-rc.d memcached defaults
-
-- name: memcached restart
-  service: name=memcached state=restarted
